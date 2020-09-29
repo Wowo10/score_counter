@@ -44,7 +44,6 @@ class _ScoreCounterState extends State<ScoreCounter> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     _myController.dispose();
     super.dispose();
   }
@@ -80,10 +79,10 @@ class _ScoreCounterState extends State<ScoreCounter> {
                       ),
                       RaisedButton(
                         onPressed: () {
-                          Navigator.pop(
-                            context,
-                            _myController.text
-                          );
+                          final returnValue = _myController.text;
+                          _myController.text = 'Player';
+
+                          Navigator.pop(context, returnValue);
                         },
                         color: Colors.blue,
                         child: Text('Save'),
@@ -92,9 +91,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
               });
 
           setState(() {
-            _playersList.add(PlayerDto(
-                name: playerName,
-                score: 0));
+            _playersList.add(PlayerDto(name: playerName, score: 0));
           });
         },
         tooltip: 'Add Player',
@@ -123,7 +120,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
         style: _biggerFont,
       ),
       trailing: Icon(
-        Icons.plus_one,
+        Icons.add,
         color: Colors.black,
       ),
       onTap: () {
