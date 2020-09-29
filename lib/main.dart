@@ -36,9 +36,17 @@ class ScoreCounter extends StatefulWidget {
 class _ScoreCounterState extends State<ScoreCounter> {
   final _playersList = <PlayerDto>[];
   final _biggerFont = TextStyle(fontSize: 22.0);
+  final _myController = TextEditingController(text: 'Player');
 
   _ScoreCounterState() {
-    _clearPlayerList();
+    _initPlayerList();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _myController.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,10 +68,32 @@ class _ScoreCounterState extends State<ScoreCounter> {
         children: dividedTiles.toList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          final playerName = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return SimpleDialog(
+                    title: const Text('Input Player Name'),
+                    children: [
+                      TextField(
+                        controller: _myController,
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                            _myController.text
+                          );
+                        },
+                        color: Colors.blue,
+                        child: Text('Save'),
+                      )
+                    ]);
+              });
+
           setState(() {
             _playersList.add(PlayerDto(
-                name: 'Player' + (_playersList.length + 1).toString(),
+                name: playerName,
                 score: 0));
           });
         },
@@ -73,12 +103,16 @@ class _ScoreCounterState extends State<ScoreCounter> {
     );
   }
 
+  void _initPlayerList() {
+    _playersList.add(PlayerDto(name: 'Player1', score: 0));
+    _playersList.add(PlayerDto(name: 'Player2', score: 0));
+  }
+
   void _clearPlayerList() {
     setState(() {
       _playersList.clear();
 
-      _playersList.add(PlayerDto(name: 'Player1', score: 0));
-      _playersList.add(PlayerDto(name: 'Player2', score: 0));
+      _initPlayerList();
     });
   }
 
