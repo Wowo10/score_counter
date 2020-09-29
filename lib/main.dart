@@ -38,8 +38,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
   final _biggerFont = TextStyle(fontSize: 22.0);
 
   _ScoreCounterState() {
-    _playersList.add(PlayerDto(name: 'Player1', score: 0));
-    _playersList.add(PlayerDto(name: 'Player2', score: 0));
+    _clearPlayerList();
   }
 
   @override
@@ -50,6 +49,12 @@ class _ScoreCounterState extends State<ScoreCounter> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: _clearPlayerList,
+          )
+        ],
       ),
       body: ListView(
         children: dividedTiles.toList(),
@@ -58,13 +63,23 @@ class _ScoreCounterState extends State<ScoreCounter> {
         onPressed: () {
           setState(() {
             _playersList.add(PlayerDto(
-                name: 'Player' + (_playersList.length + 1).toString(), score: 0));
+                name: 'Player' + (_playersList.length + 1).toString(),
+                score: 0));
           });
         },
         tooltip: 'Add Player',
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void _clearPlayerList() {
+    setState(() {
+      _playersList.clear();
+
+      _playersList.add(PlayerDto(name: 'Player1', score: 0));
+      _playersList.add(PlayerDto(name: 'Player2', score: 0));
+    });
   }
 
   Widget _buildRow(PlayerDto dto) {
