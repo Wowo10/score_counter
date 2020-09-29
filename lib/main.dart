@@ -58,7 +58,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
         onPressed: () {
           setState(() {
             _playersList.add(PlayerDto(
-                name: 'Player' + _playersList.length.toString(), score: 0));
+                name: 'Player' + (_playersList.length + 1).toString(), score: 0));
           });
         },
         tooltip: 'Add Player',
