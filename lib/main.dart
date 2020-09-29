@@ -38,10 +38,6 @@ class _ScoreCounterState extends State<ScoreCounter> {
   final _biggerFont = TextStyle(fontSize: 22.0);
   final _myController = TextEditingController(text: 'Player');
 
-  _ScoreCounterState() {
-    _initPlayerList();
-  }
-
   @override
   void dispose() {
     _myController.dispose();
@@ -80,7 +76,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
                       RaisedButton(
                         onPressed: () {
                           final returnValue = _myController.text;
-                          _myController.text = 'Player';
+                          _myController.text = 'Player' + (_playersList.length + 1).toString();
 
                           Navigator.pop(context, returnValue);
                         },
@@ -100,16 +96,9 @@ class _ScoreCounterState extends State<ScoreCounter> {
     );
   }
 
-  void _initPlayerList() {
-    _playersList.add(PlayerDto(name: 'Player1', score: 0));
-    _playersList.add(PlayerDto(name: 'Player2', score: 0));
-  }
-
   void _clearPlayerList() {
     setState(() {
       _playersList.clear();
-
-      _initPlayerList();
     });
   }
 
