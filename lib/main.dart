@@ -66,7 +66,10 @@ class _ScoreCounterState extends State<ScoreCounter> {
         onPressed: () async {
           final playerName = await showDialog(
               context: context,
-              builder: (BuildContext context) {
+              builder: (_) {
+                _myController.text =
+                    'Player' + (_playersList.length + 1).toString();
+
                 return SimpleDialog(
                     title: const Text('Input Player Name'),
                     contentPadding: EdgeInsets.all(24.0),
@@ -74,12 +77,12 @@ class _ScoreCounterState extends State<ScoreCounter> {
                       TextField(
                         controller: _myController,
                       ),
-                      SizedBox(height: 10,),                      
+                      SizedBox(
+                        height: 10,
+                      ),
                       RaisedButton(
                         onPressed: () {
                           final returnValue = _myController.text;
-                          _myController.text = 'Player' + (_playersList.length + 1).toString();
-
                           Navigator.pop(context, returnValue);
                         },
                         color: Colors.blue,
@@ -87,9 +90,9 @@ class _ScoreCounterState extends State<ScoreCounter> {
                       )
                     ]);
               });
-
           setState(() {
-            _playersList.add(PlayerDto(name: playerName, score: 0));
+            if (playerName != null)
+              _playersList.add(PlayerDto(name: playerName, score: 0));
           });
         },
         tooltip: 'Add Player',
