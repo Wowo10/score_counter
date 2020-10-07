@@ -69,10 +69,12 @@ class _ScoreCounterState extends State<ScoreCounter> {
               builder: (BuildContext context) {
                 return SimpleDialog(
                     title: const Text('Input Player Name'),
+                    contentPadding: EdgeInsets.all(24.0),
                     children: [
                       TextField(
                         controller: _myController,
                       ),
+                      SizedBox(height: 10,),                      
                       RaisedButton(
                         onPressed: () {
                           final returnValue = _myController.text;
