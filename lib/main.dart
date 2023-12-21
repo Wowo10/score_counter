@@ -19,14 +19,14 @@ class MyApp extends StatelessWidget {
 }
 
 class PlayerDto {
-  PlayerDto({this.name, this.score});
+  PlayerDto({required this.name, required this.score});
 
   String name;
   int score;
 }
 
 class ScoreCounter extends StatefulWidget {
-  ScoreCounter({Key key, this.title}) : super(key: key);
+  ScoreCounter({super.key, required this.title});
   final String title;
 
   @override
@@ -80,12 +80,12 @@ class _ScoreCounterState extends State<ScoreCounter> {
                       SizedBox(
                         height: 10,
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           final returnValue = _myController.text;
                           Navigator.pop(context, returnValue);
                         },
-                        color: Colors.blue,
+                        // color: Colors.blue,
                         child: Text('Save'),
                       )
                     ]);
