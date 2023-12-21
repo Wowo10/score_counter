@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ScoreCounter(title: 'Score Counter'),
+      home: const ScoreCounter(title: 'Score Counter'),
     );
   }
 }
@@ -26,16 +28,16 @@ class PlayerDto {
 }
 
 class ScoreCounter extends StatefulWidget {
-  ScoreCounter({super.key, required this.title});
+  const ScoreCounter({super.key, required this.title});
   final String title;
 
   @override
-  _ScoreCounterState createState() => _ScoreCounterState();
+  ScoreCounterState createState() => ScoreCounterState();
 }
 
-class _ScoreCounterState extends State<ScoreCounter> {
+class ScoreCounterState extends State<ScoreCounter> {
   final _playersList = <PlayerDto>[];
-  final _biggerFont = TextStyle(fontSize: 22.0);
+  final _biggerFont = const TextStyle(fontSize: 22.0);
   final _myController = TextEditingController(text: 'Player');
 
   @override
@@ -54,7 +56,7 @@ class _ScoreCounterState extends State<ScoreCounter> {
         title: Text(widget.title),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: _clearPlayerList,
           )
         ],
@@ -68,16 +70,16 @@ class _ScoreCounterState extends State<ScoreCounter> {
               context: context,
               builder: (_) {
                 _myController.text =
-                    'Player' + (_playersList.length + 1).toString();
+                    'Player${_playersList.length + 1}';
 
                 return SimpleDialog(
                     title: const Text('Input Player Name'),
-                    contentPadding: EdgeInsets.all(24.0),
+                    contentPadding: const EdgeInsets.all(24.0),
                     children: [
                       TextField(
                         controller: _myController,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ElevatedButton(
@@ -86,17 +88,18 @@ class _ScoreCounterState extends State<ScoreCounter> {
                           Navigator.pop(context, returnValue);
                         },
                         // color: Colors.blue,
-                        child: Text('Save'),
+                        child: const Text('Save'),
                       )
                     ]);
               });
           setState(() {
-            if (playerName != null)
+            if (playerName != null){
               _playersList.add(PlayerDto(name: playerName, score: 0));
+            }
           });
         },
         tooltip: 'Add Player',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -110,10 +113,10 @@ class _ScoreCounterState extends State<ScoreCounter> {
   Widget _buildRow(PlayerDto dto) {
     return ListTile(
       title: Text(
-        dto.name + ': ' + dto.score.toString(),
+        '${dto.name}: ${dto.score}',
         style: _biggerFont,
       ),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.add,
         color: Colors.black,
       ),
