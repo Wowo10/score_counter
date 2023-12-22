@@ -31,7 +31,19 @@ class ScoreCounterState extends State<ScoreCounter> {
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: _clearPlayerList,
+            onPressed: () { showDialog(context: context, builder: (_){
+              return AlertDialog(
+                title: const Text('DeleteAll?'),
+                actions: <Widget>[
+                  TextButton(onPressed: (){
+                    _clearPlayerList(); 
+                    Navigator.of(context).pop();
+                    }, child: const Text('Yes')),
+                  TextButton(onPressed: ()=>Navigator.of(context).pop(), child: const Text('No'))
+                ],
+              );
+            });},
+            color: Colors.black,
           )
         ],
       ),
