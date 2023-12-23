@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:score_counter/main.dart';
 import 'package:score_counter/player_dto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScoreCounter extends StatefulWidget {
   const ScoreCounter({super.key, required this.title});
@@ -20,6 +21,29 @@ class ScoreCounterState extends State<ScoreCounter> {
   void dispose() {
     _myController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadScores();
+  }
+
+  Future<void> _savePlayer(String name, int score) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(name, score);
+  }
+
+  Future<void> _loadScores() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    for (var scoreKey in prefs.getKeys()) {
+      var scoreVal = prefs.getInt(scoreKey);
+
+      setState(() {
+        _playersList.add(PlayerDto(name: scoreKey, score: scoreVal!));
+      });
+    }
   }
 
   @override
@@ -100,6 +124,8 @@ class ScoreCounterState extends State<ScoreCounter> {
                       )
                     ]);
               });
+
+          _savePlayer(playerName, 0);
           setState(() {
             if (playerName != null) {
               _playersList.add(PlayerDto(name: playerName, score: 0));
@@ -116,6 +142,14 @@ class ScoreCounterState extends State<ScoreCounter> {
     setState(() {
       _playersList.clear();
     });
+
+    () async {
+      final prefs = await SharedPreferences.getInstance();
+
+      for (var scoreKey in prefs.getKeys()) {
+        prefs.remove(scoreKey);
+      }
+    }();
   }
 
   Widget _buildRow(PlayerDto dto) {
@@ -128,11 +162,15 @@ class ScoreCounterState extends State<ScoreCounter> {
         Icons.add,
       ),
       onTap: () {
+        _savePlayer(dto.name, dto.score + 1);
+
         setState(() {
           dto.score++;
         });
       },
       onLongPress: () {
+        _savePlayer(dto.name, dto.score - 1);
+        
         setState(() {
           dto.score--;
         });
