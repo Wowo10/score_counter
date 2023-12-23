@@ -49,7 +49,7 @@ class ScoreCounterState extends State<ScoreCounter> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: const Text('Clear All?'),
+                      title: const Text('Clear?'),
                       actions: <Widget>[
                         TextButton(
                             onPressed: () {
@@ -77,6 +77,8 @@ class ScoreCounterState extends State<ScoreCounter> {
               context: context,
               builder: (_) {
                 _myController.text = 'Player${_playersList.length + 1}';
+                _myController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: _myController.text.length);
 
                 return SimpleDialog(
                     title: const Text('Input Player Name'),
@@ -85,9 +87,6 @@ class ScoreCounterState extends State<ScoreCounter> {
                       TextField(
                         controller: _myController,
                         autofocus: true,
-                        onTap: () => _myController.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _myController.text.length),
                       ),
                       const SizedBox(
                         height: 10,
@@ -130,12 +129,12 @@ class ScoreCounterState extends State<ScoreCounter> {
       ),
       onTap: () {
         setState(() {
-          dto.score += 1;
+          dto.score++;
         });
       },
       onLongPress: () {
         setState(() {
-          dto.score -= 1;
+          dto.score--;
         });
       },
     );
