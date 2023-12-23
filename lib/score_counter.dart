@@ -84,6 +84,10 @@ class ScoreCounterState extends State<ScoreCounter> {
                     children: [
                       TextField(
                         controller: _myController,
+                        autofocus: true,
+                        onTap: () => _myController.selection = TextSelection(
+                            baseOffset: 0,
+                            extentOffset: _myController.text.length),
                       ),
                       const SizedBox(
                         height: 10,

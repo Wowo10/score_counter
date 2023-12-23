@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:score_counter/score_counter.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+  const MyApp({super.key});
 
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
+  @override
+  MyAppState createState() => MyAppState();
+
+  static MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<MyAppState>()!;
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.system;
 
   @override
