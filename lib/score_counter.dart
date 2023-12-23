@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:score_counter/main.dart';
 import 'package:score_counter/player_dto.dart';
 
 class ScoreCounter extends StatefulWidget {
@@ -11,6 +12,7 @@ class ScoreCounter extends StatefulWidget {
 
 class ScoreCounterState extends State<ScoreCounter> {
   final _playersList = <PlayerDto>[];
+  var _darkMode = false;
   final _biggerFont = const TextStyle(fontSize: 22.0);
   final _myController = TextEditingController(text: 'Player');
 
@@ -30,20 +32,39 @@ class ScoreCounterState extends State<ScoreCounter> {
         title: Text(widget.title),
         actions: [
           IconButton(
+            icon: const Icon(Icons.mode_night),
+            onPressed: () {
+              _darkMode = !_darkMode;
+              if (_darkMode) {
+                MyApp.of(context).changeTheme(ThemeMode.dark);
+              } else {
+                MyApp.of(context).changeTheme(ThemeMode.light);
+              }
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () { showDialog(context: context, builder: (_){
-              return AlertDialog(
-                title: const Text('DeleteAll?'),
-                actions: <Widget>[
-                  TextButton(onPressed: (){
-                    _clearPlayerList(); 
-                    Navigator.of(context).pop();
-                    }, child: const Text('Yes')),
-                  TextButton(onPressed: ()=>Navigator.of(context).pop(), child: const Text('No'))
-                ],
-              );
-            });},
-            color: Colors.black,
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text('Clear All?'),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              _clearPlayerList();
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Yes')),
+                        TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('No'))
+                      ],
+                    );
+                  });
+            },
+            tooltip: 'Clear',
           )
         ],
       ),
@@ -55,8 +76,7 @@ class ScoreCounterState extends State<ScoreCounter> {
           final playerName = await showDialog(
               context: context,
               builder: (_) {
-                _myController.text =
-                    'Player${_playersList.length + 1}';
+                _myController.text = 'Player${_playersList.length + 1}';
 
                 return SimpleDialog(
                     title: const Text('Input Player Name'),
@@ -73,13 +93,12 @@ class ScoreCounterState extends State<ScoreCounter> {
                           final returnValue = _myController.text;
                           Navigator.pop(context, returnValue);
                         },
-                        // color: Colors.blue,
                         child: const Text('Save'),
                       )
                     ]);
               });
           setState(() {
-            if (playerName != null){
+            if (playerName != null) {
               _playersList.add(PlayerDto(name: playerName, score: 0));
             }
           });
@@ -104,7 +123,6 @@ class ScoreCounterState extends State<ScoreCounter> {
       ),
       trailing: const Icon(
         Icons.add,
-        color: Colors.black,
       ),
       onTap: () {
         setState(() {
