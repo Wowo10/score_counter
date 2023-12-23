@@ -111,6 +111,7 @@ class ScoreCounterState extends State<ScoreCounter> {
                       TextField(
                         controller: _myController,
                         autofocus: true,
+                        textCapitalization: TextCapitalization.words,
                       ),
                       const SizedBox(
                         height: 10,
