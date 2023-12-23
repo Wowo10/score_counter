@@ -3,6 +3,8 @@ import 'package:score_counter/main.dart';
 import 'package:score_counter/player_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const darkMode = 'darkMode';
+
 class ScoreCounter extends StatefulWidget {
   const ScoreCounter({super.key, required this.title});
   final String title;
@@ -34,10 +36,21 @@ class ScoreCounterState extends State<ScoreCounter> {
     await prefs.setInt(name, score);
   }
 
+  Future<void> _saveDarkMode(bool val) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(darkMode, val);
+  }
+
   Future<void> _loadScores() async {
     final prefs = await SharedPreferences.getInstance();
 
-    for (var scoreKey in prefs.getKeys()) {
+    if (prefs.getBool(darkMode) == true) {
+      _darkMode = true;
+      MyApp.of(context).changeTheme(ThemeMode.dark);
+    }
+
+    for (var scoreKey
+        in prefs.getKeys().where((element) => element != darkMode)) {
       var scoreVal = prefs.getInt(scoreKey);
 
       setState(() {
@@ -59,6 +72,7 @@ class ScoreCounterState extends State<ScoreCounter> {
             icon: const Icon(Icons.mode_night),
             onPressed: () {
               _darkMode = !_darkMode;
+              _saveDarkMode(_darkMode);
               if (_darkMode) {
                 MyApp.of(context).changeTheme(ThemeMode.dark);
               } else {
@@ -147,7 +161,8 @@ class ScoreCounterState extends State<ScoreCounter> {
     () async {
       final prefs = await SharedPreferences.getInstance();
 
-      for (var scoreKey in prefs.getKeys()) {
+      for (var scoreKey
+          in prefs.getKeys().where((element) => element != darkMode)) {
         prefs.remove(scoreKey);
       }
     }();
@@ -171,7 +186,7 @@ class ScoreCounterState extends State<ScoreCounter> {
       },
       onLongPress: () {
         _savePlayer(dto.name, dto.score - 1);
-        
+
         setState(() {
           dto.score--;
         });
